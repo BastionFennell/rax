@@ -19,7 +19,7 @@ class DatabasesController < MVCLI::Controller
   def create
     d = databases
     d.instance = instance
-    d.create ({name: "naming"})
+    d.create ({name: naming.generate_name(nil, nil)})
   end
 
   def destroy

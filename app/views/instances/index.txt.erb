@@ -1,9 +1,9 @@
 <% if empty? %>
-you don't have any servers, but you can create one by running:
-  rax create server
+you don't have any database instances, but you can create one by running:
+  rax create instance
 <% else %>
-<% each do |server| %>
-<%= server.name %> -> id: <%= server.id %>, status: <%= server.state %><%= "(#{server.progress}%)" unless server.state == 'ACTIVE' %>
+<% each do |instance| %>
+  <%= instance.name %> -> id: <%= instance.id %>, status: <%= instance.state %>
 <% end %>
 <% end %>
 

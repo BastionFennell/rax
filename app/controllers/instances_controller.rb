@@ -13,7 +13,7 @@ class InstancesController < MVCLI::Controller
 
   def create
     options = {
-      name: naming.generate_name,
+      name: naming.generate_name(nil, nil),
       flavor_id: 1,
       volume_size: 1,
     }

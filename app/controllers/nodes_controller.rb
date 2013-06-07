@@ -40,6 +40,6 @@ class NodesController < MVCLI::Controller
   end
 
   def find_node_in loadbalancer
-    loadbalancer.find{|n| n.id.to_s == params[:id]} or fail Fog::Errors::NotFound
+    loadbalancer.find{|n| n.address == params[:id]} or fail Fog::Errors::NotFound
   end
 end

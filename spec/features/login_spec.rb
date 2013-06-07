@@ -2,6 +2,7 @@ require "spec_helper"
 
 describe "logging in" do
   before do
+    pending
     @announce_dir = true
     @announce_cmd = true
     @announce_env = true
