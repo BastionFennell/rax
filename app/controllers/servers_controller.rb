@@ -34,7 +34,19 @@ class ServersController < MVCLI::Controller
   end
 
   def deploy
-    `ssh root@#{server.ip} 'bash -s' < local_script.sh`
+    require 'net/ssh'
+
+    verbose = false
+
+    Net::SSH.start(server.ipv4_address, 'root') do|ssh|
+      ssh_run ssh, 'apt-get -y update', verbose
+      ssh_run ssh, 'apt-get -y install curl git-core python-software-properties', verbose
+      ssh_run ssh, 'apt-get -y install software-properties-common', verbose
+      ssh_run ssh, 'add-apt-repository ppa:nginx/stable', verbose
+      ssh_run ssh, 'apt-get -y update', verbose
+      ssh_run ssh, 'apt-get -y install nginx', verbose
+      ssh_run ssh, 'service nginx start', verbose
+    end
   end
 
   private
@@ -51,5 +63,48 @@ class ServersController < MVCLI::Controller
     test = server
     ip_address = test.ipv4_address
     exec "ssh root@#{ip_address} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q"
+  end
+
+  def ssh_run ssh, command, verbose
+    puts "\nExecuting #{command}"
+
+    stdout_data = ""
+    stderr_data = ""
+    exit_code = nil
+    exit_signal = nil
+    ssh.open_channel do |channel|
+      channel.exec(command) do |ch, success|
+        unless success
+          abort "FAILED: couldn't execute command (ssh.channel.exec)"
+        end
+        channel.on_data do |ch,data|
+          stdout_data+=data
+        end
+
+        channel.on_extended_data do |ch,type,data|
+          stderr_data+=data
+        end
+
+        channel.on_request("exit-status") do |ch,data|
+          exit_code = data.read_long
+        end
+
+        channel.on_request("exit-signal") do |ch, data|
+          exit_signal = data.read_long
+        end
+      end
+    end
+    ssh.loop
+
+    if exit_code != 0
+      puts("exit code #{exit_code}")
+      puts("error:")
+      puts(stderr_data)
+      puts "error in command #{command}"
+      exit(1)
+    end
+
+    puts stdout_data if verbose
+    puts "Finished executing #{command}"
   end
 end
