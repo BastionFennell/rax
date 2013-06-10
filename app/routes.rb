@@ -6,6 +6,7 @@ match 'show server :id' => 'servers#show'
 match 'create server' => 'servers#create'
 match 'update server :id' => 'servers#update'
 match 'destroy server :id' => 'servers#destroy'
+match 'deploy server :id' => 'server#deploy'
 
 match 'show loadbalancers' => 'loadbalancers#index'
 match 'show loadbalancer :id' => 'loadbalancers#show'

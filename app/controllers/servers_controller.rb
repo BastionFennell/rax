@@ -33,6 +33,10 @@ class ServersController < MVCLI::Controller
     end
   end
 
+  def deploy
+    `ssh root@#{server.ip} 'bash -s' < local_script.sh`
+  end
+
   private
 
   def server
