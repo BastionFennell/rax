@@ -36,7 +36,7 @@ class ServersController < MVCLI::Controller
   def deploy
     require 'net/ssh'
 
-    verbose = false
+    verbose = true
 
     Net::SSH.start(server.ipv4_address, 'root') do|ssh|
       ssh_run ssh, 'apt-get -y update', verbose
@@ -52,7 +52,7 @@ class ServersController < MVCLI::Controller
       #Ruby
       ssh_run ssh, 'curl -Ls get.rvm.io | bash -s stable', verbose
       ssh_run ssh, 'rvm install 2.0.0-p195', verbose
-      ssh_run ssh, 'rvm --default use 2.0.0-p195', verbose
+      ssh_run ssh, 'rvm use 2.0.0-p195', verbose
 
       #Rails
       ssh_run ssh, 'gem install rails', verbose
