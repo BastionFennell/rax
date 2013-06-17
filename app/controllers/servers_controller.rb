@@ -58,8 +58,12 @@ class ServersController < MVCLI::Controller
       ssh_run ssh, 'gem install rails', verbose
 
       #MySQL
-      ssh_run 'apt-get install -y mysql-client libmysqlclient-dev'
+      ssh_run ssh, 'apt-get install -y mysql-client libmysqlclient-dev', verbose
 
+      #JS
+      ssh_run ssh, 'add-apt-repository ppa:chris-lea/node.js', verbose
+      ssh_run ssh, 'apt-get update', verbose
+      ssh_run ssh, 'apt-get -y install nodejs', verbose
 
       #Nginx Set Up
       #ssh_run ssh, 'rm /etc/nginx/sites-enabled/default', verbose
