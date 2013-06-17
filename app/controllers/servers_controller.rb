@@ -108,7 +108,7 @@ class ServersController < MVCLI::Controller
       f.puts("after 'deploy:restart', 'deploy:cleanup'")
       f.close
 
-      f = File.new("Capfile")
+      f = File.new("Capfile", 'w')
       f.puts("load 'deploy'")
       f.puts("load 'deploy/assets'")
       f.puts("load 'config/deploy'")
