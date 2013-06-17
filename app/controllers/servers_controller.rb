@@ -124,7 +124,7 @@ class ServersController < MVCLI::Controller
       #Deploy
       `bundle exec cap deploy:cold`
       `bundle exec cap deploy`
-      ssh_run ssh, "cd /u/apps/my_app/current ; rails s puma", verbose
+      ssh_run ssh, "cd /u/apps/my_app/current ; rm tmp/* ; rails s puma", verbose
 
     end
   end
