@@ -120,6 +120,7 @@ class ServersController < MVCLI::Controller
 
       #Add Capfile and Deploy.rb to the git rep
       #Source RVM in the bashrc
+      ssh_run ssh, "echo 'source $(rvm 2.0.0-p195 do rvm env --path)'|cat - .bashrc > /tmp/out && mv /tmp/out .bashrc"
 
       #Deploy
       `bundle exec cap deploy:cold`
