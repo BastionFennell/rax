@@ -98,7 +98,7 @@ class ServersController < MVCLI::Controller
       #repo = `git remote -v`
 
       f = File.new("config/deploy.rb", 'w')
-      f.puts("require 'puma/capistrano'")
+      #f.puts("require 'puma/capistrano'")
       f.puts("require 'bundler/capistrano'")
       f.puts("server '#{server.ipv4_address}' , :web, :app, :db, primary: true")
       f.puts('set :application, "my_app"')
@@ -118,9 +118,13 @@ class ServersController < MVCLI::Controller
       f.puts("load 'config/deploy'")
       f.close
 
+      #Add Capfile and Deploy.rb to the git rep
+      #Source RVM in the bashrc
+
       #Deploy
       `bundle exec cap deploy:cold`
       `bundle exec cap deploy`
+      ssh_run ssh, "cd /u/apps/my_app/current ; rails s puma", verbose
 
     end
   end
