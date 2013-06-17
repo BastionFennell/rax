@@ -97,7 +97,7 @@ class ServersController < MVCLI::Controller
       f = File.new("config/deploy.rb", 'w')
       f.puts("require 'puma/capistrano'")
       f.puts("require 'bundler/capistrano'")
-      f.puts("server #{server.ipv4_address} , :web, :app, :db, primary: true")
+      f.puts("server '#{server.ipv4_address}' , :web, :app, :db, primary: true")
       f.puts('set :application, "my_app"')
       f.puts("set :scm, 'git'")
       f.puts("set :repository, #{repo}")
