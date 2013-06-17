@@ -108,7 +108,7 @@ class ServersController < MVCLI::Controller
       f.puts("set :user, 'root'")
       f.puts("default_run_options[:pty] = true")
       f.puts("ssh_options[:forward_agent] = true")
-      f.puts("after 'deploy', 'puma:start'")
+      #f.puts("after 'deploy', 'puma:start'")
       f.puts("after 'deploy:restart', 'deploy:cleanup'")
       f.close
 
