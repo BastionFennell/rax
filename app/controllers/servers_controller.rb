@@ -102,6 +102,7 @@ class ServersController < MVCLI::Controller
       f.puts("set :scm, 'git'")
       f.puts("set :repository, '#{repo}'")
       f.puts("set :branch, 'master'")
+      f.puts("set :user, 'root'")
       f.puts("default_run_options[:pty] = true")
       f.puts("ssh_options[:forward_agent] = true")
       f.puts("after 'deploy', 'puma:start'")
