@@ -28,7 +28,7 @@ class NamingProvider
   end
 
   def get_noun
-    a = rand(55875)
+    a = rand(50432)
     counter = 0
     dict = File.new(File.expand_path "nouns.txt")
     dict.each_line do |line|
@@ -74,7 +74,7 @@ class NamingProvider
 
   def get_noun_bound letter
     higher = true
-    upper = 55875
+    upper = 50432
     lower = 0
     a = 0
     word = ""
