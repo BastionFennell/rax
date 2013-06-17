@@ -40,12 +40,80 @@ class ServersController < MVCLI::Controller
 
     Net::SSH.start(server.ipv4_address, 'root') do|ssh|
       ssh_run ssh, 'apt-get -y update', verbose
-      ssh_run ssh, 'apt-get -y install curl git-core python-software-properties', verbose
+      ssh_run ssh, 'apt-get -y install curl git-core', verbose
       ssh_run ssh, 'apt-get -y install software-properties-common', verbose
-      ssh_run ssh, 'add-apt-repository ppa:nginx/stable', verbose
-      ssh_run ssh, 'apt-get -y update', verbose
-      ssh_run ssh, 'apt-get -y install nginx', verbose
-      ssh_run ssh, 'service nginx start', verbose
+
+      #Nginx
+      #ssh_run ssh, 'add-apt-repository ppa:nginx/stable', verbose
+      #ssh_run ssh, 'apt-get -y update', verbose
+      #ssh_run ssh, 'apt-get -y install nginx', verbose
+      #ssh_run ssh, 'service nginx start', verbose
+
+      #Ruby
+      ssh_run ssh, 'curl -Ls get.rvm.io | bash -s stable', verbose
+      ssh_run ssh, 'rvm install 2.0.0-p195', verbose
+      ssh_run ssh, 'rvm --default use 2.0.0-p195', verbose
+
+      #Rails
+      ssh_run ssh, 'gem install rails', verbose
+
+      #MySQL
+      ssh_run 'apt-get install -y mysql-client libmysqlclient-dev'
+
+
+      #Nginx Set Up
+      #ssh_run ssh, 'rm /etc/nginx/sites-enabled/default', verbose
+
+      #conf_path = "/etc/nginx/sites-available/my_app.conf"
+      #ssh_run ssh, "(
+      #echo upstream my_app {
+      #echo server unix:///var/run/my_app.sock;
+      #echo }
+      #echo:
+      #echo server {
+      #echo listen 80;
+      #echo #{server.name} http://#{server.ipv4_address};
+      #echo root /var/www/my_app/public;
+      #echo:
+      #echo location / {
+      #echo proxy_pass http://my_app;
+      #echo proxy_set_header Host $host;
+      #echo proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      #echo }
+      #echo }
+      #) > #{conf_path}", verbose
+
+      #ssh_run ssh, 'ln -sf /etc/nginx/sites-available/my_app.conf /etc/nginx/sites-enabled/my_app.conf', verbose
+      #ssh_run ssh, 'service nginx restart', verbose
+
+      #Set up for deploy
+      repo = params[:repo]
+      #repo = `git remote -v`
+
+      f = File.new("config/deploy.rb", 'w')
+      f.puts("require 'puma/capistrano'")
+      f.puts("require 'bundler/capistrano'")
+      f.puts("server #{server.ipv4_address} , :web, :app, :db, primary: true")
+      f.puts('set :application, "my_app"')
+      f.puts("set :scm, 'git'")
+      f.puts("set :repository, #{repo}")
+      f.puts("set :branch, 'master'")
+      f.puts("default_run_options[:pty] = true")
+      f.puts("ssh_options[:forward_agent] = true")
+      f.puts("after 'deploy', 'puma:start'")
+      f.puts("after 'deploy:restart', 'deploy:cleanup'")
+      f.close
+
+      f = File.new("Capfile")
+      f.puts("load 'deploy'")
+      f.puts("load 'deploy/assets'")
+      f.puts("load 'config/deploy'")
+      f.close
+
+      #Deploy
+      `bundle exec cap deploy:cold`
+      `bundle exec cap deploy`
+
     end
   end
 

@@ -5,7 +5,7 @@ class NamingProvider
   end
 
   def generate_name adj, noun
-    return "divine-reef"
+    #return "divine-reef"
     if adj == nil and noun == nil
       get_adj + "-" + get_noun
     else
