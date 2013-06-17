@@ -100,7 +100,7 @@ class ServersController < MVCLI::Controller
       f.puts("server '#{server.ipv4_address}' , :web, :app, :db, primary: true")
       f.puts('set :application, "my_app"')
       f.puts("set :scm, 'git'")
-      f.puts("set :repository, #{repo}")
+      f.puts("set :repository, '#{repo}'")
       f.puts("set :branch, 'master'")
       f.puts("default_run_options[:pty] = true")
       f.puts("ssh_options[:forward_agent] = true")
