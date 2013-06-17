@@ -57,6 +57,9 @@ class ServersController < MVCLI::Controller
       #Rails
       ssh_run ssh, 'gem install rails', verbose
 
+      #Bundler
+      ssh_run ssh, 'gem install bundler', verbose
+
       #MySQL
       ssh_run ssh, 'apt-get install -y mysql-client libmysqlclient-dev', verbose
 
