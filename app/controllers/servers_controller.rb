@@ -52,7 +52,7 @@ class ServersController < MVCLI::Controller
       #Ruby
       ssh_run ssh, 'curl -Ls get.rvm.io | bash -s stable', verbose
       ssh_run ssh, 'rvm install 2.0.0-p195', verbose
-      ssh_run ssh, 'rvm use 2.0.0-p195', verbose
+      ssh_run ssh, 'rvm --default use 2.0.0-p195', verbose
 
       #Rails
       ssh_run ssh, 'gem install rails', verbose
