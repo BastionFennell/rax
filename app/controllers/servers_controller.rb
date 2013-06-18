@@ -8,7 +8,7 @@ class ServersController < MVCLI::Controller
 
   def show
     #What if you have two or more servers with the same name?
-    server
+    return server
   end
 
   def create
