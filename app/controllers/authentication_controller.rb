@@ -41,7 +41,7 @@ class AuthenticationController < MVCLI::Controller
 
   def logout
     n = Netrc.read
-    n.delete "api.rackspace.com"
+    n.delete 'api.rackspace.com'
     n.save
   end
 end
